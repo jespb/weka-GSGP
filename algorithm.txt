@@ -1,0 +1,58 @@
+	This file will explain the implementation made in this Geometric Semantic
+Genetic Programming classifier.
+
+	Operations used: +, -, *, / (protected division)
+	Terminal node: only values from the dataset
+
+	ms: (Diference between the max and min value of the target values on the train dataset) / 100
+	train fraction: 70%
+	test fraction: 30%
+
+	(These values will be able to be changed by arguments in Weka)
+	Population Size: 250
+	Initial max depth: 7
+
+
+	Initialization of the classifier:
+		It's created a population of trees using the grow method which are then 
+		normalized using the sigmoid function on their root
+
+		It's created a population of trees using the grow method and the one with
+		the lower rmse on the train dataset is chosen, it's created a population
+		instead of a single tree to give a headstart to the classifier, making it
+		more likely to start with a good tree.
+
+		The chosen tree is considered the root of the classifier
+		This tree will also be chosen to be the global best tree
+
+	Training the classifier:
+		While improving* :
+			It's picked the best tree from the prior generation
+			
+			A new population is created by making descendents of the picked tree
+			using mutation*
+			
+			The sigmoid trees chosen to make the mutation of the best tree of the
+			population are added to the list of trees used in mutations on the 
+			root tree
+
+			If this new tree has a better test rmse than the global best tree
+			it will now be considered the new global best tree
+
+	Predictions:
+		The global best tree is used to make predictions
+
+	*improving:
+		It's considered that the classifier is improving if at least 5% of the 
+		descendents of the picked tree have a lower train rmse than the picked tree
+
+	*mutation:
+		The mutation of a tree is made by using the following function:
+			new tree = old tree + (ms * (tr1 - tr2))
+
+		where:
+			ms is the mutation step
+			tr1 and tr2 are random trees from the sigmoid population
+
+		the ms value used on the function is a random value between the defined
+		ms value and 0 
