@@ -8,12 +8,12 @@ import weka.classifiers.trees.gsgp.util.Arrays;
  * @author João Batista, jbatista@di.fc.ul.pt
  *
  */
-public class TreeGSGPOperations {
+public class TreeOperations {
 	/**
 	 * Alerts t applying the sigmoid function in its base
 	 * @param t tree
 	 */
-	public static void sigmoid(TreeGSGP t){
+	public static void sigmoid(Tree t){
 		Node n = t.getHead();
 		Node neg = new Node(new Node("-1"),n, "*");
 		Node e = new Node(new Node("e"), neg, "^");
@@ -39,7 +39,7 @@ public class TreeGSGPOperations {
 	/**
 	 * Creates the semantic of a tree
 	 */
-	public static double[] semantic(TreeGSGP t, double [][] data, double perc){
+	public static double[] semantic(Tree t, double [][] data, double perc){
 		Node n = t.getHead();
 		int size = (int) (perc > 0 ? data.length*perc : data.length + (int)(data.length*perc));
 		double [] d = new double[size];

@@ -5,7 +5,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import weka.classifiers.trees.gsgp.forest.Forest;
-import weka.classifiers.trees.gsgp.forest.ForestGSGP;
 import weka.classifiers.trees.gsgp.util.Arrays;
 import weka.classifiers.trees.gsgp.util.Data;
 import weka.classifiers.trees.gsgp.util.Files;
@@ -198,7 +197,7 @@ public class ClientWekaSim {
 	 * @throws IOException
 	 */
 	private static void setForest() throws IOException{
-		f = new ForestGSGP(treeOutputFilename, operations, 
+		f = new Forest(treeOutputFilename, operations, 
 				terminals, maxDepth, ms, data, target, 
 				populationSize,trainPercentage, numberOfGenerations);
 	}
