@@ -5,7 +5,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import weka.classifiers.trees.gsgp.tree.Tree;
+import weka.classifiers.trees.gsgp.forest.ForestFunctions;
 import weka.classifiers.trees.gsgp.tree.TreeMutationHandler;
+import weka.classifiers.trees.gsgp.tree.TreeCreationHandler;
 import weka.classifiers.trees.gsgp.tree.TreeOperations;
 import weka.classifiers.trees.gsgp.util.Mat;
 
@@ -21,8 +23,6 @@ public class Forest implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private boolean firstGen = true;
-	
-	private int idGen=0;
 	
 	private boolean messages = true;
 
@@ -66,20 +66,20 @@ public class Forest implements Serializable {
 
 		trn = new Tree[pop_size];
 		for(int i = 0; i < pop_size; i++){
-			trn[i] = new Tree(op, term, 0.1,max_depth, data,train_perc,target,idGen++);
+			trn[i] = TreeCreationHandler.create(op, term, 0.1,max_depth, data,train_perc,target);
 			TreeOperations.sigmoid(trn[i]);
 		}
 		
-		tree = new Tree(op, term, 0.1,max_depth, data,train_perc,target, idGen++);
+		tree = TreeCreationHandler.create(op, term, 0.1,max_depth, data,train_perc,target);
 		Tree candidate;
 		for(int i = 0; i < pop_size; i++){
-			candidate = new Tree(op, term, 0.1,max_depth, data,train_perc,target, idGen++);
+			candidate = TreeCreationHandler.create(op, term, 0.1,max_depth, data,train_perc,target);
 			if(fitnessTrain(candidate)< fitnessTrain(tree))
 				tree = candidate;
 		}
 		ancient = tree;
 	}
-	
+
 	/**
 	 * Makes a new generation
 	 * @return
@@ -91,7 +91,7 @@ public class Forest implements Serializable {
 		for(int i = 0; i < descendentes.length; i++){
 			tr1 = trn[Mat.random(trn.length)];
 			tr2 = trn[Mat.random(trn.length)];
-			descendentes[i] = TreeMutationHandler.mutation(tree,tr1,tr2,ms,target, idGen++);
+			descendentes[i] = TreeMutationHandler.mutation(tree,tr1,tr2,ms,target);
 			if(best == null || fitnessTrain(descendentes[i]) < fitnessTrain(best)){
 				best = descendentes[i];
 			}
@@ -108,47 +108,6 @@ public class Forest implements Serializable {
 		}
 		
 		return new double[] {fitnessTrain(best), fitnessTest(best)};
-	}
-	
-	/**
-	 * returns the train rmse of t
-	 * @param t
-	 * @return
-	 */
-	private double fitnessTrain(Tree t){
-		return t.getTrainRMSE(null,null,0);
-	}
-	
-	/**
-	 * returns the test rmse of t
-	 * @param t
-	 * @return
-	 */
-	private double fitnessTest(Tree t){
-		return t.getTestRMSE(null,null,0);
-	}
-
-	/**
-	 * Return true if the classifier is improving
-	 * It's considered to be improving if at least 5% of
-	 * the descendents have a better rmse than the parent
-	 * @return
-	 */
-	private boolean improving() {
-		if(firstGen){
-			firstGen = false;
-			return true;
-		}
-		if(generation > maxGeneration) return false;
-		
-		int count = 0;
-		for(int i = 0; i < descendentes.length; i++){
-			if(fitnessTrain(descendentes[i])< fitnessTrain(oldTree))
-				count++;
-		}
-		double result = (count*100.0/descendentes.length);
-		
-		return result > 5;
 	}
 
 	/**
@@ -188,6 +147,26 @@ public class Forest implements Serializable {
 		}
 
 		return acc;
+	}
+	
+	/**
+	 * Return true if the classifier is improving
+	 * It's considered to be improving if at least 5% of
+	 * the descendents have a better rmse than the parent
+	 * @return
+	 */
+	private boolean improving() {
+		boolean improving = ForestFunctions.improving(firstGen, descendentes, oldTree);
+		firstGen = false;
+		return improving;
+	}
+	
+	private double fitnessTrain(Tree t) {
+		return ForestFunctions.fitnessTrain(t);
+	}
+	
+	private double fitnessTest(Tree t) {
+		return ForestFunctions.fitnessTest(t);
 	}
 
 	/**

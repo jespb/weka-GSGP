@@ -19,7 +19,7 @@ public class TreeMutationHandler {
 	 * @param id new tree id
 	 * @return descendent of original through mutation
 	 */
-	public static Tree mutation(Tree original, Tree tr1, Tree tr2,double ms,double [] target, int id){
+	public static Tree mutation(Tree original, Tree tr1, Tree tr2,double ms,double [] target){
 		if(ms < 0) ms = Math.random()*-ms;
 
 		double [] parentsIds = new double[] {original.getId(), tr1.getId(), tr2.getId(), ms};
@@ -35,7 +35,7 @@ public class TreeMutationHandler {
 		double train_rmse = Arrays.rmse(d_tr, target,0);
 		double test_rmse = Arrays.rmse(d_te, target,d_tr.length);
 
-		return new Tree(parentsIds, null, d_tr, d_te, train_rmse, test_rmse, id);
+		return new Tree(parentsIds, null, d_tr, d_te, train_rmse, test_rmse);
 	}
 	
 	/**

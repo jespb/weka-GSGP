@@ -15,6 +15,8 @@ public class Tree implements Serializable{
 	/**
 	 * 
 	 */
+	private static int idGen = 0;
+	
 	private static final long serialVersionUID = 1L;
 	
 	private ArrayList<Double> geneologicTree;
@@ -42,14 +44,14 @@ public class Tree implements Serializable{
 	 * @param test_rmse
 	 */
 	public Tree(double [] parentsIds, Node head,double [] train_semantic, 
-			double [] test_semantic,double train_rmse, double test_rmse, int id){
+			double [] test_semantic,double train_rmse, double test_rmse){
 		this.head = head;
 		this.train_semantic = train_semantic;
 		this.test_semantic = test_semantic;
 		this.train_rmse = train_rmse;
 		this.test_rmse = test_rmse;
 		this.parentsId = parentsIds;
-		this.id = id;
+		this.id = idGen++;
 	}
 	
 	/**
@@ -63,7 +65,7 @@ public class Tree implements Serializable{
 	 * @param train_p
 	 * @param target
 	 */
-	public Tree(String [] op, String [] term, double t_rate, int depth, double[][] data, double train_p, double [] target, int id){
+	public Tree(String [] op, String [] term, double t_rate, int depth, double[][] data, double train_p, double [] target){
 		
 		head = new Node(op, term, t_rate,0, depth);
 		train_semantic = TreeOperations.semantic(this,data,train_p);
@@ -72,7 +74,7 @@ public class Tree implements Serializable{
 		train_rmse = Arrays.rmse(train_semantic, target,0);
 		test_rmse = Arrays.rmse(test_semantic, target,train_semantic.length);
 		
-		this.id = id;
+		this.id = idGen++;
 		
 		geneologicTree = new ArrayList<Double>();
 	}

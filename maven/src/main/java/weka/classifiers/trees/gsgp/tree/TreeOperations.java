@@ -41,10 +41,11 @@ public class TreeOperations {
 	 */
 	public static double[] semantic(Tree t, double [][] data, double perc){
 		Node n = t.getHead();
-		int size = (int) (perc > 0 ? data.length*perc : data.length + (int)(data.length*perc));
+		int s = (int) (data.length*perc);
+		int size = s + (perc<0 ? data.length : 0); 
 		double [] d = new double[size];
 		for(int i = 0; i < d.length; i++){
-			d[i] = n.calculate(data[(int) (i - (perc < 0?data.length*perc:0))]);
+			d[i] = n.calculate(data[i - (perc < 0?s:0)]);
 		}
 		return d;
 	}

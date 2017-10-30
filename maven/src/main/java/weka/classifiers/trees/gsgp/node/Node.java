@@ -110,9 +110,10 @@ public class Node implements Serializable{
 
 	/**
 	 * Returns true if the node has no children
+	 * This assumes that either the node has two children or zero
 	 * @return
 	 */
 	private boolean isLeaf(){
-		return r==null && l==null;
+		return r==null;
 	}
 }
