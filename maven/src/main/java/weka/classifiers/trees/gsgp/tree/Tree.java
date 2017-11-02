@@ -26,11 +26,11 @@ public class Tree implements Serializable{
 	
 	private Node head;
 	
-	private double[] train_semantic;
-	private double[] test_semantic;
+	private double[] trainSemantic;
+	private double[] testSemantic;
 	
-	private double train_rmse;
-	private double test_rmse;
+	private double trainRMSE;
+	private double testRMSE;
 	
 	/**
 	 * Constructor
@@ -46,10 +46,10 @@ public class Tree implements Serializable{
 	public Tree(double [] parentsIds, Node head,double [] train_semantic, 
 			double [] test_semantic,double train_rmse, double test_rmse){
 		this.head = head;
-		this.train_semantic = train_semantic;
-		this.test_semantic = test_semantic;
-		this.train_rmse = train_rmse;
-		this.test_rmse = test_rmse;
+		this.trainSemantic = train_semantic;
+		this.testSemantic = test_semantic;
+		this.trainRMSE = train_rmse;
+		this.testRMSE = test_rmse;
 		this.parentsId = parentsIds;
 		this.id = idGen++;
 	}
@@ -67,12 +67,12 @@ public class Tree implements Serializable{
 	 */
 	public Tree(String [] op, String [] term, double t_rate, int depth, double[][] data, double train_p, double [] target){
 		
-		head = new Node(op, term, t_rate,0, depth);
-		train_semantic = TreeOperations.semantic(this,data,train_p);
-		test_semantic = TreeOperations.semantic(this,data,-train_p);
+		head = new Node(op, term, t_rate,depth);
+		trainSemantic = TreeOperations.semantic(this,data,train_p);
+		testSemantic = TreeOperations.semantic(this,data,-train_p);
 		
-		train_rmse = Arrays.rmse(train_semantic, target,0);
-		test_rmse = Arrays.rmse(test_semantic, target,train_semantic.length);
+		trainRMSE = Arrays.rmse(trainSemantic, target,0);
+		testRMSE = Arrays.rmse(testSemantic, target,trainSemantic.length);
 		
 		this.id = idGen++;
 		
@@ -96,7 +96,7 @@ public class Tree implements Serializable{
 	 * @return
 	 */
 	public double[] getTrainSemantic(){
-		return train_semantic;
+		return trainSemantic;
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class Tree implements Serializable{
 	 * @return
 	 */
 	public double[] getTestSemantic(){
-		return test_semantic;
+		return testSemantic;
 	}
 	
 	/**
@@ -112,7 +112,7 @@ public class Tree implements Serializable{
 	 * @return
 	 */
 	public double getTestRMSE(double [][] data, double [] target, double trainPercentage){
-		return test_rmse;
+		return testRMSE;
 	}
 
 	/**
@@ -120,15 +120,7 @@ public class Tree implements Serializable{
 	 * @return
 	 */
 	public double getTrainRMSE(double [][] data, double [] target, double trainPercentage){
-		return train_rmse;
-	}
-
-	/**
-	 * Sets the TreeGSGP head
-	 * @param n 
-	 */
-	public void setHead(Node n) {
-		head = n;
+		return trainRMSE;
 	}
 
 	/**
@@ -147,6 +139,38 @@ public class Tree implements Serializable{
 	}
 
 	/**
+	 *Return the geneological tree of this Individual
+	 * @return
+	 */
+	public ArrayList<Double> getGeneologicalTree() {
+		return geneologicTree;
+	}
+	
+	/**
+	 * Sets the TreeGSGP head
+	 * @param n 
+	 */
+	public void setHead(Node n) {
+		head = n;
+	}
+	
+	/**
+	 * Sets the tree train rmse
+	 * @param rmseTrain
+	 */
+	public void setTrainRMSE(double rmseTrain) {
+		trainRMSE = rmseTrain;
+	}
+	
+	/**
+	 * Sets the tree test rmse
+	 * @param rmseTest
+	 */
+	public void setTestRMSE(double rmseTest) {
+		testRMSE = rmseTest;
+	}
+
+	/**
 	 * Adds parents to a tree
 	 * @param parentsId
 	 */
@@ -157,14 +181,6 @@ public class Tree implements Serializable{
 	}
 
 	/**
-	 *Return the geneological tree of this Individual
-	 * @return
-	 */
-	public ArrayList<Double> getGeneologicalTree() {
-		return geneologicTree;
-	}
-	
-	/**
 	 * Clones a tree
 	 */
 	public Tree clone(){
@@ -172,27 +188,11 @@ public class Tree implements Serializable{
 		ret.parentsId = parentsId;
 		ret.id = id;
 		ret.head = head;
-		ret.train_semantic = train_semantic;
-		ret.test_semantic = test_semantic;
-		ret.train_rmse = train_rmse;
-		ret.test_rmse = test_rmse;
+		ret.trainSemantic = trainSemantic;
+		ret.testSemantic = testSemantic;
+		ret.trainRMSE = trainRMSE;
+		ret.testRMSE = testRMSE;
 		ret.geneologicTree = (ArrayList<Double>) geneologicTree.clone();
 		return ret;
-	}
-
-	/**
-	 * Sets the tree test rmse
-	 * @param rmseTest
-	 */
-	public void setTestRMSE(double rmseTest) {
-		test_rmse = rmseTest;
-	}
-
-	/**
-	 * Sets the tree train rmse
-	 * @param rmseTrain
-	 */
-	public void setTrainRMSE(double rmseTrain) {
-		train_rmse = rmseTrain;
 	}
 }

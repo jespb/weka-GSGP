@@ -56,7 +56,7 @@ public class GeometricSemanticGeneticProgramming extends AbstractClassifier impl
 		double ms = -(targetMax-targetMin)/200.0;
 		double train_perc = 0.7;
 		
-		forest = new Forest("",op, term, maxDepth, ms,dados, target, populationSize, train_perc, 6000);
+		forest = new Forest(op, term, maxDepth, ms,dados, target, populationSize, train_perc);
 		
 		forest.train();
 

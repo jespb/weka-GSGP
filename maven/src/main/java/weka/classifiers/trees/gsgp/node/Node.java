@@ -18,8 +18,6 @@ public class Node implements Serializable{
 	Node l = null;
 	Node r = null;
 	
-	public static int index;
-
 	/**
 	 * Basic constructor
 	 * @param value
@@ -47,13 +45,13 @@ public class Node implements Serializable{
 	 * @param t_rate
 	 * @param depth
 	 */
-	public Node(String [] op, String [] term, double t_rate, int depth, int maxDepth){
-		if(depth>0 && Math.random() < t_rate || depth >= maxDepth){
+	public Node(String [] op, String [] term, double t_rate, int depth){
+		if(Math.random() < t_rate || depth < 0){
 			v = term[Mat.random(term.length)];
 		}else{
 			v = op[Mat.random(op.length)];
-			l = new Node(op, term, t_rate, depth+1, maxDepth);
-			r = new Node(op, term, t_rate, depth+1, maxDepth );
+			l = new Node(op, term, t_rate, depth-1);
+			r = new Node(op, term, t_rate, depth-1);
 		}
 	}
 

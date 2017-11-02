@@ -26,19 +26,17 @@ public class Forest implements Serializable {
 	
 	private boolean messages = true;
 
-	Tree tree;
-	Tree oldTree;
-	Tree ancient;
-	Tree globalBest;
-	Tree [] trn;
-	Tree [] descendentes;
+	private Tree tree;
+	private Tree oldTree;
+	private Tree ancient;
+	private Tree globalBest;
+	private Tree [] trn;
+	private Tree [] descendentes;
 
-	double[] target;
-	double ms;
-	double train_perc;
+	private double[] target;
+	private double ms;
 
-	int generation = 0;
-	int maxGeneration = 2000;
+	private int generation = 0;
 
 	/**
 	 * Construtor
@@ -55,14 +53,12 @@ public class Forest implements Serializable {
 	 * @param classification
 	 * @throws IOException
 	 */
-	public Forest(String filename, String [] op, String [] term, int max_depth, double ms, 
-			double [][] data, double [] target, int pop_size, double train_perc,
-			int maxGeneration) throws IOException{
+	public Forest(String [] op, String [] term, int max_depth, double ms, 
+			double [][] data, double [] target, int pop_size, double train_perc
+			) throws IOException{
 		message("Creating forest...");
 		this.target = target;
 		this.ms = ms;
-		this.train_perc = train_perc;
-		this.maxGeneration = maxGeneration;
 
 		trn = new Tree[pop_size];
 		for(int i = 0; i < pop_size; i++){
@@ -156,8 +152,11 @@ public class Forest implements Serializable {
 	 * @return
 	 */
 	private boolean improving() {
-		boolean improving = ForestFunctions.improving(firstGen, descendentes, oldTree);
-		firstGen = false;
+		if(firstGen) {
+			firstGen=false;
+			return true;
+		}
+		boolean improving = ForestFunctions.improving(descendentes, oldTree);
 		return improving;
 	}
 	

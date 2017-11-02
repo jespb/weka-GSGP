@@ -11,12 +11,7 @@ public class ForestFunctions {
 	 * the descendents have a better rmse than the parent
 	 * @return
 	 */
-	static boolean improving(boolean firstGen, Tree [] descendentes, Tree parent) {
-		if(firstGen){
-			firstGen = false;
-			return true;
-		}
-		
+	static boolean improving(Tree [] descendentes, Tree parent) {		
 		int count = 0;
 		for(int i = 0; i < descendentes.length; i++){
 			if(fitnessTrain(descendentes[i])< fitnessTrain(parent))
