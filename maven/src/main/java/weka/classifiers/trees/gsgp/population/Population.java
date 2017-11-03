@@ -1,11 +1,11 @@
-package weka.classifiers.trees.gsgp.forest;
+package weka.classifiers.trees.gsgp.population;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import weka.classifiers.trees.gsgp.population.PopulationFunctions;
 import weka.classifiers.trees.gsgp.tree.Tree;
-import weka.classifiers.trees.gsgp.forest.ForestFunctions;
 import weka.classifiers.trees.gsgp.tree.TreeMutationHandler;
 import weka.classifiers.trees.gsgp.tree.TreeCreationHandler;
 import weka.classifiers.trees.gsgp.tree.TreeOperations;
@@ -16,7 +16,7 @@ import weka.classifiers.trees.gsgp.util.Mat;
  * @author João Batista, jbatista@di.fc.ul.pt
  *
  */
-public class Forest implements Serializable {
+public class Population implements Serializable {
 	/**
 	 * 
 	 */
@@ -53,7 +53,7 @@ public class Forest implements Serializable {
 	 * @param classification
 	 * @throws IOException
 	 */
-	public Forest(String [] op, String [] term, int max_depth, double ms, 
+	public Population(String [] op, String [] term, int max_depth, double ms, 
 			double [][] data, double [] target, int pop_size, double train_perc
 			) throws IOException{
 		message("Creating forest...");
@@ -156,16 +156,16 @@ public class Forest implements Serializable {
 			firstGen=false;
 			return true;
 		}
-		boolean improving = ForestFunctions.improving(descendentes, oldTree);
+		boolean improving = PopulationFunctions.improving(descendentes, oldTree);
 		return improving;
 	}
 	
 	private double fitnessTrain(Tree t) {
-		return ForestFunctions.fitnessTrain(t);
+		return PopulationFunctions.fitnessTrain(t);
 	}
 	
 	private double fitnessTest(Tree t) {
-		return ForestFunctions.fitnessTest(t);
+		return PopulationFunctions.fitnessTest(t);
 	}
 
 	/**

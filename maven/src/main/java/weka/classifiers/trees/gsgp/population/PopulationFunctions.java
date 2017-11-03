@@ -1,8 +1,8 @@
-package weka.classifiers.trees.gsgp.forest;
+package weka.classifiers.trees.gsgp.population;
 
 import weka.classifiers.trees.gsgp.tree.Tree;
 
-public class ForestFunctions {
+public class PopulationFunctions {
 	public static int improvingThreshold = 5; // percentage
 	
 	/**

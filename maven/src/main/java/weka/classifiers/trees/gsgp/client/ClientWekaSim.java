@@ -4,7 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import weka.classifiers.trees.gsgp.forest.Forest;
+import weka.classifiers.trees.gsgp.population.Population;
 import weka.classifiers.trees.gsgp.util.Arrays;
 import weka.classifiers.trees.gsgp.util.Data;
 import weka.classifiers.trees.gsgp.util.Files;
@@ -44,7 +44,7 @@ public class ClientWekaSim {
 
 	// Variables
 	public static double [][] results = new double [numberOfGenerations][3];
-	private static Forest f = null;
+	private static Population f = null;
 
 	/**
 	 * main
@@ -189,7 +189,7 @@ public class ClientWekaSim {
 	 * @throws IOException
 	 */
 	private static void setForest() throws IOException{
-		f = new Forest(operations, 
+		f = new Population(operations, 
 				terminals, maxDepth, ms, data, target, 
 				populationSize,trainFraction);
 	}

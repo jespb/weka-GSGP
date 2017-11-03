@@ -6,7 +6,7 @@ import java.util.Vector;
 
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Classifier;
-import weka.classifiers.trees.gsgp.forest.Forest;
+import weka.classifiers.trees.gsgp.population.Population;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.Utils;
@@ -20,7 +20,7 @@ public class GeometricSemanticGeneticProgramming extends AbstractClassifier impl
 
 	private static final long serialVersionUID = 1L;
 	
-	private Forest forest;
+	private Population forest;
 	
 	private int populationSize = 300;
 	private int maxDepth = 7;
@@ -56,7 +56,7 @@ public class GeometricSemanticGeneticProgramming extends AbstractClassifier impl
 		double ms = -(targetMax-targetMin)/200.0;
 		double train_perc = 0.7;
 		
-		forest = new Forest(op, term, maxDepth, ms,dados, target, populationSize, train_perc);
+		forest = new Population(op, term, maxDepth, ms,dados, target, populationSize, train_perc);
 		
 		forest.train();
 
