@@ -7,6 +7,7 @@ import java.util.Vector;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Classifier;
 import weka.classifiers.trees.gsgp.population.Population;
+import weka.classifiers.trees.gsgp.util.Arrays;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.Utils;
@@ -16,7 +17,7 @@ import weka.core.Utils;
  * @author Jo�o Batista, jbatista@di.fc.ul.pt
  *
  */
-public class GeometricSemanticGeneticProgramming extends AbstractClassifier implements Classifier, Serializable{
+public class GSGP extends AbstractClassifier implements Classifier, Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -53,8 +54,10 @@ public class GeometricSemanticGeneticProgramming extends AbstractClassifier impl
 		for(int i = 0; i < term.length; i++)
 			term[i] = "x"+i;
 
-		double ms = -(targetMax-targetMin)/200.0;
 		double train_perc = 0.7;
+
+		double[] minmax = Arrays.minmax(target,0,(int) (dados.length*train_perc));
+		double ms = -(minmax[1]-minmax[0])/100.0;
 		
 		forest = new Population(op, term, maxDepth, ms,dados, target, populationSize, train_perc);
 		

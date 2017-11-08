@@ -3,6 +3,7 @@ package weka.classifiers.trees.gsgp.population;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import weka.classifiers.trees.gsgp.population.PopulationFunctions;
 import weka.classifiers.trees.gsgp.tree.Tree;
@@ -13,7 +14,7 @@ import weka.classifiers.trees.gsgp.util.Mat;
 
 /**
  * 
- * @author João Batista, jbatista@di.fc.ul.pt
+ * @author Joao Batista, jbatista@di.fc.ul.pt
  *
  */
 public class Population implements Serializable {
@@ -132,16 +133,14 @@ public class Population implements Serializable {
 	public double predict(double[] data) {
 		double acc = globalBest.getHead().calculate(data);
 		ArrayList<Double> trace = globalBest.getGeneologicalTree();
-		ArrayList<Double> randoms = new ArrayList<Double>();
+		HashMap<Double,Double> randoms = new HashMap<Double,Double>();
 		
 		for(int i = 0; i<trn.length; i++){
-			randoms.add(trn[i].getHead().calculate(data));
+			randoms.put(trn[i].getId(),trn[i].getHead().calculate(data));
 		}
-		
 		for(int i = 0; i+2 < trace.size(); i+=3){
-			acc += trace.get(i+2) * (randoms.get(trace.get(i).intValue())-randoms.get(trace.get(i+1).intValue()));
+			acc += trace.get(i+2) * (randoms.get(trace.get(i))-randoms.get(trace.get(i+1)));
 		}
-
 		return acc;
 	}
 	
